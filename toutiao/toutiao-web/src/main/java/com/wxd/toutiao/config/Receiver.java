@@ -35,16 +35,13 @@ public class Receiver {
         }
     }
 
-    private StringRedisTemplate stringRedisTemplate;
 
     @Autowired
-    public Receiver(StringRedisTemplate stringRedisTemplate) {
-        this.stringRedisTemplate = stringRedisTemplate;
+    public Receiver() {
     }
 
 
     public void receiveMessage(String message) {
-        System.out.println(message);
         String[] split = message.split(":");
         if(split.length < 2) {
             return ;

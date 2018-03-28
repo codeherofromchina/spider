@@ -26,7 +26,7 @@ import org.jsoup.select.Elements;
  * Created by wangxiaodan on 2018/3/23.
  */
 public final class HttpUtils {
-    private static String DEFAULT_CHARSET = "UTF-8";
+    public static String DEFAULT_CHARSET = "UTF-8";
 
 
     /**

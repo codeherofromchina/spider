@@ -41,7 +41,7 @@ public class ReceiverListenerConfig {
     * Receiver实例
     */
     @Bean
-    Receiver receiver(StringRedisTemplate stringRedisTemplate){
-        return new Receiver(stringRedisTemplate);
+    Receiver receiver(){
+        return new Receiver();
     }
 }
