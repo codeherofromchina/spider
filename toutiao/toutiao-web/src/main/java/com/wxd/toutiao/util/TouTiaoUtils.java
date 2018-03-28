@@ -1,5 +1,7 @@
 package com.wxd.toutiao.util;
 
+import com.wxd.toutiao.dao.impl.AbstractTouTiaoDao;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,6 +9,14 @@ import java.util.Map;
  * Created by wangxiaodan on 2018/3/26.
  */
 public final class TouTiaoUtils {
+    private final static String IMAGE_URL = "https://www.toutiao.com/api/pc/feed/";
+
+    public static String fetchImage(String category ,String timestamp ,String sign){
+
+        return null;
+    }
+
+
 
     /**
      * 获取请求中的as和cp的参数值

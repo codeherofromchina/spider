@@ -1,5 +1,24 @@
 package com.wxd.toutiao.dao;
 
-public interface ImageNewsDao {
+import com.wxd.toutiao.domain.ImageNews;
+import com.wxd.toutiao.domain.ImageNewsDetails;
 
+import java.util.List;
+
+public interface ImageNewsDao {
+    /**
+     * 查询图片文档中的图片列表
+     * @param category
+     * @param maxBehotTime
+     * @return
+     */
+    public List<ImageNews> findImageNews(String category, long maxBehotTime) throws Exception;
+
+
+    /**
+     * 根据关键字查找图片新闻详情
+     * @param uuid
+     * @return
+     */
+    public ImageNewsDetails findImageNewsDetails(String uuid);
 }

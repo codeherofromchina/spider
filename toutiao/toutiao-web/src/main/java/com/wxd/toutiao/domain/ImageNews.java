@@ -10,6 +10,7 @@ import java.util.Map;
  *
  */
 public class ImageNews {
+	private String uuid;
 	/**
 	 * 标题
 	 */
@@ -47,6 +48,15 @@ public class ImageNews {
 	private String item_id;
 	private String group_id;
 	private int gallary_flag;
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+
 	public String getTitle() {
 		return title;
 	}
@@ -190,6 +200,7 @@ public class ImageNews {
 	}
 	public void setGroup_id(String group_id) {
 		this.group_id = group_id;
+		setUuid(group_id);
 	}
 	public int getGallary_flag() {
 		return gallary_flag;
