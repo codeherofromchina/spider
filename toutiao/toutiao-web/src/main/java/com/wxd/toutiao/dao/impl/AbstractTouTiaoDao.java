@@ -74,6 +74,6 @@ public abstract class AbstractTouTiaoDao {
 		}
 	}
 
-	private final static long WAIT_TIME = 1000 * 10; // 10s
+	private final static long WAIT_TIME = 1000 * 3; // 10s
 
 }

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +20,9 @@ public final class TouTiaoUtils {
 
 	public static String fetchImage(String category, String timestamp, String sign, Map<String, String> header) {
 		Map<String, String> params = getAsAndCp();
-		params.put("category", category);
+		if (StringUtils.isNotBlank(category)) {
+			params.put("category", category);
+		}
 		params.put("utm_source", "toutiao");
 		params.put("max_behot_time", timestamp);
 		params.put("_signature", sign);

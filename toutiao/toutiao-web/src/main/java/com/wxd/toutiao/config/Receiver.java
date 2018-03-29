@@ -56,7 +56,6 @@ public class Receiver {
                 synchronized (obj) {
                     obj.notify();
                 }
-                iterator.remove();
             }
         }
 
