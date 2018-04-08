@@ -17,6 +17,8 @@ import java.util.regex.Pattern;
  */
 public class ImagesDetail {
     private String title;
+    
+    private int maxImgWidth = 0;
     /**
      * 图片总数量
      */
@@ -79,6 +81,14 @@ public class ImagesDetail {
     public void setTitle(String title) {
         this.title = title;
     }
+    
+    public int getMaxImgWidth() {
+		return maxImgWidth;
+	}
+    
+    public void setMaxImgWidth(int maxImgWidth) {
+		this.maxImgWidth = maxImgWidth;
+	}
 
 
     public static void main(String[] args) throws IOException {

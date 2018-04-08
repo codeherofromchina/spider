@@ -3,6 +3,8 @@ package com.wxd.toutiao.domain;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 /**
  * 图片新闻
  * 
@@ -209,6 +211,9 @@ public class ImageNews {
 		this.gallary_flag = gallary_flag;
 	}
 
-	
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this).toString();
+	}
 	
 }
