@@ -2,6 +2,7 @@ package com.wxd.toutiao.service;
 
 import com.wxd.toutiao.comm.ResultStatusEnum;
 import com.wxd.toutiao.domain.ImageNews;
+import com.wxd.toutiao.domain.ImagesDetail;
 import com.wxd.toutiao.exception.ToutiaoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,33 +16,49 @@ import java.util.List;
 
 @Service
 public class ImageNewsService {
-	private Logger logger = LoggerFactory.getLogger(ImageNewsService.class);
+    private Logger logger = LoggerFactory.getLogger(ImageNewsService.class);
 
-	@Autowired
-	@Qualifier("httpImageNewsDao")
-	private ImageNewsDao imageNewsDao;
+    @Autowired
+    @Qualifier("httpImageNewsDao")
+    private ImageNewsDao imageNewsDao;
 
-	/**
-	 * 查找图片新闻
-	 * @param category
-	 * @param maxBehotTime
-	 * @return
-	 * @throws ToutiaoException
-	 */
-	public List<ImageNews> findImageNews(String category, long maxBehotTime) throws ToutiaoException {
-		try {
-			return imageNewsDao.findImageNews(category, maxBehotTime);
-		}catch (Exception ex) {
-			logger.error("异常",ex,category,maxBehotTime);
-			if (ex instanceof ToutiaoException) {
-				throw (ToutiaoException) ex;
-			} else {
-				throw new ToutiaoException(ResultStatusEnum.SERVER_ERROR);
-			}
-		}
-	}
+    /**
+     * 查找图片新闻
+     *
+     * @param category
+     * @param maxBehotTime
+     * @return
+     * @throws ToutiaoException
+     */
+    public List<ImageNews> findImageNews(String category, long maxBehotTime) throws ToutiaoException {
+        try {
+            return imageNewsDao.findImageNews(category, maxBehotTime);
+        } catch (Exception ex) {
+            logger.error("异常", ex, category, maxBehotTime);
+            if (ex instanceof ToutiaoException) {
+                throw (ToutiaoException) ex;
+            } else {
+                throw new ToutiaoException(ResultStatusEnum.SERVER_ERROR);
+            }
+        }
+    }
 
-
-
-
+    /**
+     * 查询图片详情页面
+     * @param uuid
+     * @return
+     * @throws ToutiaoException
+     */
+    public ImagesDetail findImagesDetail(String uuid) throws ToutiaoException {
+        try {
+            return imageNewsDao.findImageNewsDetails(uuid);
+        } catch (Exception ex) {
+            logger.error("异常", ex);
+            if (ex instanceof ToutiaoException) {
+                throw (ToutiaoException) ex;
+            } else {
+                throw new ToutiaoException(ResultStatusEnum.SERVER_ERROR);
+            }
+        }
+    }
 }

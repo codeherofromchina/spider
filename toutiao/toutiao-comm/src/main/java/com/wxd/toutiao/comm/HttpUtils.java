@@ -22,6 +22,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -69,6 +70,28 @@ public final class HttpUtils {
 
 
         return result.toString();
+    }
+
+
+    public static void main(String[] args) throws IOException {
+        String url = "https://www.toutiao.com/a6541880887787651591/";
+
+        Map<String,String> header = new HashMap<String, String>();
+        header.put("user-agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36");
+
+        String content = get(url,header);
+
+        String imagesPatternStr = "JSON.parse\\(\"(.*)\"\\),\\s*siblingList";
+        //siblingList: (.*)\s*publish_time:
+
+        Pattern imagesPattern = Pattern.compile(imagesPatternStr);
+
+        Matcher matcher = imagesPattern.matcher(content);
+        if (matcher.matches()) {
+            System.out.println(matcher.group());
+        }
+        System.out.println(content);
+
     }
 
     /**

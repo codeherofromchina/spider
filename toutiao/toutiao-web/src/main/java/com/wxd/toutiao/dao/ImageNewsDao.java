@@ -1,7 +1,8 @@
 package com.wxd.toutiao.dao;
 
 import com.wxd.toutiao.domain.ImageNews;
-import com.wxd.toutiao.domain.ImageNewsDetails;
+import com.wxd.toutiao.domain.ImagesDetail;
+import com.wxd.toutiao.exception.ToutiaoException;
 
 import java.util.List;
 
@@ -20,5 +21,5 @@ public interface ImageNewsDao {
      * @param uuid
      * @return
      */
-    public ImageNewsDetails findImageNewsDetails(String uuid);
+    public ImagesDetail findImageNewsDetails(String uuid) throws ToutiaoException;
 }

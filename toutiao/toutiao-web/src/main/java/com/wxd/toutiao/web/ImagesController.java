@@ -1,18 +1,17 @@
 package com.wxd.toutiao.web;
 
+import com.wxd.toutiao.comm.Result;
 import com.wxd.toutiao.comm.ResultStatusEnum;
+import com.wxd.toutiao.domain.ImageNews;
+import com.wxd.toutiao.domain.ImagesDetail;
 import com.wxd.toutiao.exception.ToutiaoException;
 import com.wxd.toutiao.service.ImageNewsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.wxd.toutiao.comm.Result;
-import com.wxd.toutiao.domain.ImageNews;
 
 import java.util.List;
 
@@ -29,12 +28,28 @@ public class ImagesController {
     private ImageNewsService imageNewsService;
 
     /**
+     * 图片详情
+     *
+     * @param uuid
+     * @return
+     */
+    @RequestMapping(value = "/default", method = RequestMethod.POST)
+    public Result<ImagesDetail> imageDetails(String uuid) throws ToutiaoException {
+        ImagesDetail imagesDetail = imageNewsService.findImagesDetail(uuid);
+        if (imagesDetail == null) {
+            return new Result<ImagesDetail>(ResultStatusEnum.PAGE_NOT_EXIST);
+        }
+
+        return new Result<ImagesDetail>(imagesDetail);
+    }
+
+    /**
      * 所有图片
      *
      * @param timePoint
      * @return
      */
-    @RequestMapping("/default")
+    @RequestMapping(value = "/default", method = RequestMethod.POST)
     public Result<List<ImageNews>> execute(long timePoint) {
         return get(timePoint, null);
     }
@@ -45,7 +60,7 @@ public class ImagesController {
      * @param timePoint
      * @return
      */
-    @RequestMapping(value = "/gallery")
+    @RequestMapping(value = "/gallery", method = RequestMethod.POST)
     public Result<List<ImageNews>> gallery(long timePoint) {
         return get(timePoint, "组图");
     }

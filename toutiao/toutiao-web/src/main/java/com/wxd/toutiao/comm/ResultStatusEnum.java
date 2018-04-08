@@ -6,7 +6,7 @@ package com.wxd.toutiao.comm;
  *
  */
 public enum ResultStatusEnum {
-	SUCCESS(0, "成功"),FAIL(1,"失败"),EMPTY(2,"结果为空"),SERVER_INIT_ERROR(3,"服务器初始化异常"),SERVER_TIMEOUT(4,"服务器获取数据超时"),SERVER_ERROR(5,"服务器异常");
+	SUCCESS(0, "成功"),FAIL(1,"失败"),EMPTY(2,"结果为空"),SERVER_INIT_ERROR(3,"服务器初始化异常"),SERVER_TIMEOUT(4,"服务器获取数据超时"),SERVER_ERROR(5,"服务器异常"),PAGE_NOT_EXIST(6,"页面不存在");
 	private int code;
 	private String msg;
 

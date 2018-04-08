@@ -6,7 +6,7 @@ import java.util.Map;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.wxd.toutiao.domain.ImagesDetail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Repository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wxd.toutiao.dao.ImageNewsDao;
 import com.wxd.toutiao.domain.ImageNews;
-import com.wxd.toutiao.domain.ImageNewsDetails;
 import com.wxd.toutiao.exception.ToutiaoException;
 import com.wxd.toutiao.util.TouTiaoUtils;
 
@@ -45,8 +44,15 @@ public class HttpImageNewsDao extends AbstractTouTiaoDao implements ImageNewsDao
 
 
     @Override
-    public ImageNewsDetails findImageNewsDetails(String uuid) {
-        return null;
+    public ImagesDetail findImageNewsDetails(String uuid) throws ToutiaoException {
+        Map<String, String> header = getHeader();
+
+        JSONObject contentObject = TouTiaoUtils.fetchImageDetail(uuid, header);
+
+
+        ImagesDetail detail = new ImagesDetail();
+
+        return detail;
     }
 
 
