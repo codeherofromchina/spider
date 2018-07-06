@@ -53,6 +53,9 @@ public class HttpImageNewsDao extends AbstractTouTiaoDao implements ImageNewsDao
 		Map<String, String> header = getHeader();
 		// 获取详情信息json数据
 		JSONObject contentObject = TouTiaoUtils.fetchImageDetail(uuid, header);
+		if (contentObject == null) {
+		    return null;
+        }
 		// 新建结果集
 		ImagesDetail detail = new ImagesDetail();
 		JSONObject imageDetailJson = contentObject.getJSONObject("detail");

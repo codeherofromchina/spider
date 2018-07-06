@@ -33,7 +33,7 @@ public class ImagesController {
      * @param uuid
      * @return
      */
-    @RequestMapping(value = "/default", method = RequestMethod.POST)
+    @RequestMapping(value = "/imageDetails", method = RequestMethod.POST)
     public Result<ImagesDetail> imageDetails(String uuid) throws ToutiaoException {
         ImagesDetail imagesDetail = imageNewsService.findImagesDetail(uuid);
         if (imagesDetail == null) {

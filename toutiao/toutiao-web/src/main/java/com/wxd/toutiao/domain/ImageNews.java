@@ -32,6 +32,7 @@ public class ImageNews {
 	// 来源
 	private String source;
 	private int group_source;
+	// 详情内容是否存在图册 true:图册  false:整片文章
 	private boolean has_gallery;
 	// 用户首页地址
 	private String media_url;
@@ -41,6 +42,7 @@ public class ImageNews {
 	private long behot_time;
 	// 评论数量
 	private int comments_count;
+	// 图片相册和文章的区别，图册：false  文章：true
 	private boolean single_mode;
 	private boolean middle_mode;
 	private boolean more_mode;

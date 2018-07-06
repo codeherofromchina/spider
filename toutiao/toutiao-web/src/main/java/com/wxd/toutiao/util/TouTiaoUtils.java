@@ -162,7 +162,11 @@ public final class TouTiaoUtils {
             for (int i = 0; i < array.size(); i++) {
                 String string = array.getString(i);
                 if (StringUtils.isNotBlank(string)) {
-                    string = TouTiaoUtils.UnicodeTochinese(string.replace("u", "\\u"));
+                    try {
+                        string = TouTiaoUtils.UnicodeTochinese(string.replace("u", "\\u"));
+                    }catch (Exception ex) {
+                        string = "";
+                    }
                 }
                 result.add(string);
             }
