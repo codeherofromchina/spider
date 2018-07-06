@@ -1,0 +1,96 @@
+1:起点网
+	获取列表页面：https://www.qidian.com/free
+	获取免费图书列表页面：https://www.qidian.com/free
+	获取图书介绍及其封面：https://book.qidian.com/info/3602691
+	获取图书目录接口：https://book.qidian.com/ajax/book/category?bookId=1003694333
+	获取图书内容页面：https://read.qidian.com/chapter/iHBVJ0Mlhkw1/hMNLY_o2zHYex0RJOkJclQ2
+2：笔趣阁 https://www.biquwu.cc/biquge/42_42541/c17527774.html
+
+
+drop table if exists sources;
+create table sources(
+	id int AUTO_INCREMENT primary key,
+    `name` varchar(200) unique comment '名称',
+    url varchar(500) comment '首页' 
+) comment '图书来源';
+
+drop table if exists types;
+create table types (
+	id int AUTO_INCREMENT primary key,
+    `name` varchar(200) unique comment '分类名称',
+    parent_id int comment '父级id' REFERENCES types(id) ,
+    seq int comment '排序序列号',
+    pic varchar(250) comment '分类图标',
+    class int default 0 comment '分类所属种类0：默认  1：男生  2：女生  3：出版',
+    del_flag bit default 0 comment '是否删除 0：未删除 1：已删除',
+    create_time date comment '创建时间'
+) comment '图书分类';
+
+drop table if exists label;
+create table label (
+	id int AUTO_INCREMENT primary key,
+    `name` varchar(200) unique comment '标签名称',
+    seq int comment '排序序列号',
+    book_num int default 0 comment '图书数量',
+    create_time date comment '创建时间'
+) comment '图书标签';
+
+drop table if exists book;
+create table book (
+	id int AUTO_INCREMENT primary key,
+    `name` varchar(200) comment '图书名称',
+    `alias` varchar(500) comment '图书别名，多个用分号分隔',
+    `author` varchar(200) comment '图书作者',
+    `intro` varchar(200) comment '简明扼要的介绍',
+    `desc` text comment '介绍',
+    `vip` bit default 0 comment '此本小说爬取是否需要vip，如果是说明小说爬取不全，1：vip  0:非vip',
+    `cover_photo` varchar(500) comment '图书封面图片',
+    `score` DECIMAL(2,1) comment '分数，最高分数9.9',
+    `recommend` int default 0 comment '图书总推荐',
+    `recommend_week` int default 0 comment '图书周推荐',
+    `sources` varchar(500) comment '图书来源url',
+    `sources_id` varchar(200) comment '来源中的唯一标识',
+    types_id int comment '图书所属分类' REFERENCES types(id),
+    word_count int comment '图书总字数',
+    latest_chapter_id int comment '最新章节',
+    stat bit default 0 comment '图书进度状态1：连载  0：完本',
+    update_time date comment '最新更新时间',
+    `spider_date` date comment '最新采集时间',
+    create_time date comment '创建时间',
+    UNIQUE KEY `unique_name_author` (`name`,`author`)
+) comment '图书表';
+
+drop table if exists book_label;
+create table book_label (
+	book_id int references book(id) ,
+    label_id int references label(id) ,
+    primary key (book_id,label_id)
+) comment '图书标签对应表';
+
+drop table if exists catalog;
+create table catalog (
+	id int AUTO_INCREMENT primary key,
+    `name` varchar(200) comment '目录原名称',
+    `show_name` varchar(200) comment '修正后名称',
+    `content_url` varchar(200) comment '内容页面URL',
+    book_id int comment '所属图书' REFERENCES book(id),
+    word_count int comment '章节总字数',
+    catalog_num int comment '章节数',
+    pub_time date comment '发布时间',
+    mark bit default 0 comment '是否已经爬取，1：已经爬取，0：未爬取',
+    del_flag bit default 0 comment '是否删除0：未删除 1：已删除',
+    `sources_id` varchar(200) comment '来源中的唯一标识',
+    `spider_date` date comment '最新采集时间',
+    create_time date comment '创建时间'
+) comment '图书目录';
+
+drop table if exists content;
+create table content (
+	id int AUTO_INCREMENT primary key,
+    book_id int comment '所属图书' REFERENCES book(id),
+    catalog_id int comment '所属章节' REFERENCES catalog(id),
+    txt text comment '章节内容'
+) comment '图书内容';
+
+
+
