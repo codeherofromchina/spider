@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="novel.dao.mapper.CatalogMapper" >
+  <resultMap id="BaseResultMap" type="novel.dao.model.Catalog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="show_name" property="showName" jdbcType="VARCHAR" />
+    <result column="volume_name" property="volumeName" jdbcType="VARCHAR" />
+    <result column="content_url" property="contentUrl" jdbcType="VARCHAR" />
+    <result column="book_id" property="bookId" jdbcType="INTEGER" />
+    <result column="word_count" property="wordCount" jdbcType="INTEGER" />
+    <result column="catalog_num" property="catalogNum" jdbcType="INTEGER" />
+    <result column="pub_time" property="pubTime" jdbcType="TIMESTAMP" />
+    <result column="mark" property="mark" jdbcType="BIT" />
+    <result column="del_flag" property="delFlag" jdbcType="BIT" />
+    <result column="sources_id" property="sourcesId" jdbcType="VARCHAR" />
+    <result column="uuid" property="uuid" jdbcType="VARCHAR" />
+    <result column="spider_date" property="spiderDate" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, `name`, show_name, volume_name, content_url, book_id, word_count, catalog_num,
+    pub_time, mark, del_flag, sources_id, uuid, spider_date, create_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="novel.dao.model.CatalogExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from catalog
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from catalog
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from catalog
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="novel.dao.model.CatalogExample" >
+    delete from catalog
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="novel.dao.model.Catalog" >
+    insert into catalog (id, `name`, show_name,
+      volume_name, content_url, book_id, 
+      word_count, catalog_num, pub_time, 
+      mark, del_flag, sources_id, uuid, 
+      spider_date, create_time)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{showName,jdbcType=VARCHAR}, 
+      #{volumeName,jdbcType=VARCHAR}, #{contentUrl,jdbcType=VARCHAR}, #{bookId,jdbcType=INTEGER}, 
+      #{wordCount,jdbcType=INTEGER}, #{catalogNum,jdbcType=INTEGER}, #{pubTime,jdbcType=TIMESTAMP}, 
+      #{mark,jdbcType=BIT}, #{delFlag,jdbcType=BIT}, #{sourcesId,jdbcType=VARCHAR}, #{uuid,jdbcType=VARCHAR}, 
+      #{spiderDate,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="novel.dao.model.Catalog" >
+    insert into catalog
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        `name`,
+      </if>
+      <if test="showName != null" >
+        show_name,
+      </if>
+      <if test="volumeName != null" >
+        volume_name,
+      </if>
+      <if test="contentUrl != null" >
+        content_url,
+      </if>
+      <if test="bookId != null" >
+        book_id,
+      </if>
+      <if test="wordCount != null" >
+        word_count,
+      </if>
+      <if test="catalogNum != null" >
+        catalog_num,
+      </if>
+      <if test="pubTime != null" >
+        pub_time,
+      </if>
+      <if test="mark != null" >
+        mark,
+      </if>
+      <if test="delFlag != null" >
+        del_flag,
+      </if>
+      <if test="sourcesId != null" >
+        sources_id,
+      </if>
+      <if test="uuid != null" >
+        uuid,
+      </if>
+      <if test="spiderDate != null" >
+        spider_date,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="showName != null" >
+        #{showName,jdbcType=VARCHAR},
+      </if>
+      <if test="volumeName != null" >
+        #{volumeName,jdbcType=VARCHAR},
+      </if>
+      <if test="contentUrl != null" >
+        #{contentUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="bookId != null" >
+        #{bookId,jdbcType=INTEGER},
+      </if>
+      <if test="wordCount != null" >
+        #{wordCount,jdbcType=INTEGER},
+      </if>
+      <if test="catalogNum != null" >
+        #{catalogNum,jdbcType=INTEGER},
+      </if>
+      <if test="pubTime != null" >
+        #{pubTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mark != null" >
+        #{mark,jdbcType=BIT},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=BIT},
+      </if>
+      <if test="sourcesId != null" >
+        #{sourcesId,jdbcType=VARCHAR},
+      </if>
+      <if test="uuid != null" >
+        #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="spiderDate != null" >
+        #{spiderDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="novel.dao.model.CatalogExample" resultType="java.lang.Integer" >
+    select count(*) from catalog
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update catalog
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.name != null" >
+        `name` = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.showName != null" >
+        show_name = #{record.showName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.volumeName != null" >
+        volume_name = #{record.volumeName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contentUrl != null" >
+        content_url = #{record.contentUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bookId != null" >
+        book_id = #{record.bookId,jdbcType=INTEGER},
+      </if>
+      <if test="record.wordCount != null" >
+        word_count = #{record.wordCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.catalogNum != null" >
+        catalog_num = #{record.catalogNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.pubTime != null" >
+        pub_time = #{record.pubTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.mark != null" >
+        mark = #{record.mark,jdbcType=BIT},
+      </if>
+      <if test="record.delFlag != null" >
+        del_flag = #{record.delFlag,jdbcType=BIT},
+      </if>
+      <if test="record.sourcesId != null" >
+        sources_id = #{record.sourcesId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.uuid != null" >
+        uuid = #{record.uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.spiderDate != null" >
+        spider_date = #{record.spiderDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update catalog
+    set id = #{record.id,jdbcType=INTEGER},
+      `name` = #{record.name,jdbcType=VARCHAR},
+      show_name = #{record.showName,jdbcType=VARCHAR},
+      volume_name = #{record.volumeName,jdbcType=VARCHAR},
+      content_url = #{record.contentUrl,jdbcType=VARCHAR},
+      book_id = #{record.bookId,jdbcType=INTEGER},
+      word_count = #{record.wordCount,jdbcType=INTEGER},
+      catalog_num = #{record.catalogNum,jdbcType=INTEGER},
+      pub_time = #{record.pubTime,jdbcType=TIMESTAMP},
+      mark = #{record.mark,jdbcType=BIT},
+      del_flag = #{record.delFlag,jdbcType=BIT},
+      sources_id = #{record.sourcesId,jdbcType=VARCHAR},
+      uuid = #{record.uuid,jdbcType=VARCHAR},
+      spider_date = #{record.spiderDate,jdbcType=TIMESTAMP},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="novel.dao.model.Catalog" >
+    update catalog
+    <set >
+      <if test="name != null" >
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="showName != null" >
+        show_name = #{showName,jdbcType=VARCHAR},
+      </if>
+      <if test="volumeName != null" >
+        volume_name = #{volumeName,jdbcType=VARCHAR},
+      </if>
+      <if test="contentUrl != null" >
+        content_url = #{contentUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="bookId != null" >
+        book_id = #{bookId,jdbcType=INTEGER},
+      </if>
+      <if test="wordCount != null" >
+        word_count = #{wordCount,jdbcType=INTEGER},
+      </if>
+      <if test="catalogNum != null" >
+        catalog_num = #{catalogNum,jdbcType=INTEGER},
+      </if>
+      <if test="pubTime != null" >
+        pub_time = #{pubTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mark != null" >
+        mark = #{mark,jdbcType=BIT},
+      </if>
+      <if test="delFlag != null" >
+        del_flag = #{delFlag,jdbcType=BIT},
+      </if>
+      <if test="sourcesId != null" >
+        sources_id = #{sourcesId,jdbcType=VARCHAR},
+      </if>
+      <if test="uuid != null" >
+        uuid = #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="spiderDate != null" >
+        spider_date = #{spiderDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="novel.dao.model.Catalog" >
+    update catalog
+    set `name` = #{name,jdbcType=VARCHAR},
+      show_name = #{showName,jdbcType=VARCHAR},
+      volume_name = #{volumeName,jdbcType=VARCHAR},
+      content_url = #{contentUrl,jdbcType=VARCHAR},
+      book_id = #{bookId,jdbcType=INTEGER},
+      word_count = #{wordCount,jdbcType=INTEGER},
+      catalog_num = #{catalogNum,jdbcType=INTEGER},
+      pub_time = #{pubTime,jdbcType=TIMESTAMP},
+      mark = #{mark,jdbcType=BIT},
+      del_flag = #{delFlag,jdbcType=BIT},
+      sources_id = #{sourcesId,jdbcType=VARCHAR},
+      uuid = #{uuid,jdbcType=VARCHAR},
+      spider_date = #{spiderDate,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -14,6 +14,7 @@
         <module>novel-web</module>
         <module>novel-dao</module>
         <module>novel-api</module>
+        <module>novel-admin</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -31,6 +32,7 @@
         <version>1.5.14.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+
 
     <build>
         <pluginManagement>

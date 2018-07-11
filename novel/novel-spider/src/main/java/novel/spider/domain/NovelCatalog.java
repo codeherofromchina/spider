@@ -10,13 +10,13 @@ import java.util.Date;
 public class NovelCatalog {
     private String name;
     private String showName;
-    private String contentUrl;
+    private String volumeName; // 卷宗名称
     private int wordCount;
-    private String sourceId;
+    private String sourceId; // 章节在网站中的唯一标识
     private boolean vip;
     private Date pubTime;
-    private boolean mark;// 是否已经爬取 1：已经爬取  0：未爬取
-    private Date spiderDate;
+    private String bookUuid; // 所在图书的唯一标识,解析时不用设置
+    private String uuid; // 内容识别目录的唯一标识
 
     public String getName() {
         return name;
@@ -32,6 +32,14 @@ public class NovelCatalog {
 
     public void setShowName(String showName) {
         this.showName = showName;
+    }
+
+    public String getVolumeName() {
+        return volumeName;
+    }
+
+    public void setVolumeName(String volumeName) {
+        this.volumeName = volumeName;
     }
 
     public String getSourceId() {
@@ -50,14 +58,6 @@ public class NovelCatalog {
         return vip;
     }
 
-    public String getContentUrl() {
-        return contentUrl;
-    }
-
-    public void setContentUrl(String contentUrl) {
-        this.contentUrl = contentUrl;
-    }
-
     public int getWordCount() {
         return wordCount;
     }
@@ -74,20 +74,20 @@ public class NovelCatalog {
         this.pubTime = pubTime;
     }
 
-    public boolean isMark() {
-        return mark;
+    public String getBookUuid() {
+        return bookUuid;
     }
 
-    public void setMark(boolean mark) {
-        this.mark = mark;
+    public void setBookUuid(String bookUuid) {
+        this.bookUuid = bookUuid;
     }
 
-    public Date getSpiderDate() {
-        return spiderDate;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setSpiderDate(Date spiderDate) {
-        this.spiderDate = spiderDate;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     @Override

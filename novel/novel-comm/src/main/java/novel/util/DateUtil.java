@@ -12,7 +12,12 @@ import java.util.Date;
 public class DateUtil {
     public static final String LONG_FORMAT = "yyyy-MM-dd hh:mm:ss";
 
-
+    /**
+     * 将字符串转换为日期
+     * @param date
+     * @param format
+     * @return
+     */
     public static Date parse(String date, String format) {
         if (StringUtils.isNotBlank(date)) {
             try {
@@ -20,6 +25,19 @@ public class DateUtil {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+        }
+        return null;
+    }
+
+    /**
+     * 格式化日期成字符串
+     * @param date
+     * @param formatPattern
+     * @return
+     */
+    public static String format(Date date, String formatPattern) {
+        if (date != null) {
+            return new SimpleDateFormat(formatPattern).format(date);
         }
         return null;
     }

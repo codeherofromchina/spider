@@ -27,4 +27,6 @@ public interface LabelMapper {
     int updateByPrimaryKeySelective(Label record);
 
     int updateByPrimaryKey(Label record);
+
+    void incBookNum(Integer id);
 }

@@ -11,7 +11,6 @@ import java.util.List;
  */
 public class NovelList {
     private int totalPages;
-    private int pageSize;
     private List<String> bookInfoUrls;
 
     public int getTotalPages() {
@@ -21,11 +20,6 @@ public class NovelList {
     public void setTotalPages(int totalPages) {
         this.totalPages = totalPages;
     }
-
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
-    }
-
 
     public List<String> getBookInfoUrls() {
         return bookInfoUrls;

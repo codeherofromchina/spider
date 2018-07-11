@@ -6,7 +6,7 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="seq" property="seq" jdbcType="INTEGER" />
     <result column="book_num" property="bookNum" jdbcType="INTEGER" />
-    <result column="create_time" property="createTime" jdbcType="DATE" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -67,7 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, name, seq, book_num, create_time
+    id, `name`, seq, book_num, create_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="novel.dao.model.LabelExample" >
     select
@@ -99,11 +99,11 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="novel.dao.model.Label" >
-    insert into label (id, name, seq, 
+  <insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="novel.dao.model.Label" >
+    insert into label (id, `name`, seq,
       book_num, create_time)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{seq,jdbcType=INTEGER}, 
-      #{bookNum,jdbcType=INTEGER}, #{createTime,jdbcType=DATE})
+      #{bookNum,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="novel.dao.model.Label" >
     insert into label
@@ -138,7 +138,7 @@
         #{bookNum,jdbcType=INTEGER},
       </if>
       <if test="createTime != null" >
-        #{createTime,jdbcType=DATE},
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -155,7 +155,7 @@
         id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.name != null" >
-        name = #{record.name,jdbcType=VARCHAR},
+        `name` = #{record.name,jdbcType=VARCHAR},
       </if>
       <if test="record.seq != null" >
         seq = #{record.seq,jdbcType=INTEGER},
@@ -164,7 +164,7 @@
         book_num = #{record.bookNum,jdbcType=INTEGER},
       </if>
       <if test="record.createTime != null" >
-        create_time = #{record.createTime,jdbcType=DATE},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -174,10 +174,10 @@
   <update id="updateByExample" parameterType="map" >
     update label
     set id = #{record.id,jdbcType=INTEGER},
-      name = #{record.name,jdbcType=VARCHAR},
+      `name` = #{record.name,jdbcType=VARCHAR},
       seq = #{record.seq,jdbcType=INTEGER},
       book_num = #{record.bookNum,jdbcType=INTEGER},
-      create_time = #{record.createTime,jdbcType=DATE}
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -195,17 +195,21 @@
         book_num = #{bookNum,jdbcType=INTEGER},
       </if>
       <if test="createTime != null" >
-        create_time = #{createTime,jdbcType=DATE},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="novel.dao.model.Label" >
     update label
-    set name = #{name,jdbcType=VARCHAR},
+    set `name` = #{name,jdbcType=VARCHAR},
       seq = #{seq,jdbcType=INTEGER},
       book_num = #{bookNum,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=DATE}
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="incBookNum" parameterType="java.lang.Integer" >
+    update label set book_num = book_num + 1
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

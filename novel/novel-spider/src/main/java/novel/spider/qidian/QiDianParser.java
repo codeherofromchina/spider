@@ -1,11 +1,16 @@
 package novel.spider.qidian;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import novel.spider.Parser;
 import novel.spider.domain.Novel;
 import novel.spider.domain.NovelCatalog;
 import novel.spider.domain.NovelList;
 import novel.util.DateUtil;
+import novel.util.HttpUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.protocol.HTTP;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -16,9 +21,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
+import java.util.UUID;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -50,6 +54,9 @@ public class QiDianParser implements Parser {
         Document doc = Jsoup.parse(content);
         // 解析所有图书链接
         Elements elements = doc.getElementsByAttributeValue("data-eid", "qd_B58");
+        if (elements == null) {
+            elements = doc.getElementsByAttributeValue("data-eid", "qd_E05");
+        }
         List<String> hrefs = elements.eachAttr("href");
         hrefs = hrefs.parallelStream().map(href -> PROTOCOL + href).collect(Collectors.toList());
         // 解析总页码
@@ -65,7 +72,6 @@ public class QiDianParser implements Parser {
 
         NovelList novelList = new NovelList();
         novelList.setBookInfoUrls(hrefs);
-        novelList.setPageSize(elements.size());
         novelList.setTotalPages(totalPages);
         return novelList;
     }
@@ -94,11 +100,6 @@ public class QiDianParser implements Parser {
         // 封面图
         Element coverPhoto = doc.getElementsByAttributeValue("data-eid", "qd_G09").first().child(0);
         novel.setCoverPhoto(PROTOCOL + coverPhoto.attr("src"));
-        // 评分
-        Element score1 = doc.getElementById("score1");
-        Element score2 = doc.getElementById("score2");
-        float fScore = Integer.parseInt(score1.html()) + Integer.parseInt(score2.html()) / 10.0F;
-        novel.setScore(fScore);
         // 父级分类
         Elements pTypes = doc.getElementsByAttributeValue("data-eid", "qd_G10");
         novel.setParentTypes(pTypes.html());
@@ -107,15 +108,21 @@ public class QiDianParser implements Parser {
         novel.setSonTypes(sTypes.html());
         // 获取sourceId
         Element sourcesId = doc.getElementById("bookImg");
-        novel.setSourcesId(sourcesId.attr("data-bid"));
+        novel.setSourceId(sourcesId.attr("data-bid"));
         // 获取source
         Elements sources = bookInfo.getElementsByAttributeValue("data-eid", "qd_G18");
         novel.setSources(sources.attr("href"));
-        // 图书总推荐
-        // 图书周推荐
-        //图书总字数
-        // 设置采集时间为当前时间
-        novel.setSpiderDate(new Date());
+        // 生成唯一标识uuid
+        novel.setUuid(UUID.randomUUID().toString());
+        // 解析标签
+        Elements labelEles = doc.getElementsByAttributeValue("data-eid", "qd_G70");
+        if (labelEles != null && labelEles.size() > 0) {
+            List<String> labels = new ArrayList<>();
+            labelEles.forEach(vo -> {
+                labels.add(vo.html());
+            });
+            novel.setLabelList(labels);
+        }
 
         return novel;
     }
@@ -141,42 +148,50 @@ public class QiDianParser implements Parser {
      */
     @Override
     public List<NovelCatalog> parseBookCatalog(String catalogContent) {
-        Document doc = Jsoup.parse(catalogContent);
-        Elements catalogs = doc.getElementsByAttributeValue("data-eid", "qd_G55");
-
+        // 编码接口数据为utf-8
+        byte[] bytes = catalogContent.getBytes(HTTP.DEF_CONTENT_CHARSET);
+        catalogContent = new String(bytes, HttpUtils.UTF8_CHARSET);
         List<NovelCatalog> result = new ArrayList<>();
-        catalogs.forEach(vo -> {
-            NovelCatalog catalog = new NovelCatalog();
-            // 设置目录名称
-            String name = vo.html();
-            catalog.setName(name);
-            catalog.setShowName(reviseName(name));
-            // 设置目录的内容链接
-            String href = vo.attr("href");
-            catalog.setContentUrl(PROTOCOL_SSL + href);
-            // 设置字数和发布时间
-            String title = vo.attr("title");
-            Matcher matcher = CATALOG_WORD_COUNT.matcher(title);
-            if (matcher.matches()) {
-                String timeStr = matcher.group(1);
-                String wordCount = matcher.group(2);
-                catalog.setPubTime(DateUtil.parse(timeStr, DateUtil.LONG_FORMAT));
-                if (StringUtils.isNumeric(wordCount)) {
-                    catalog.setWordCount(Integer.parseInt(wordCount));
+        try {
+            JSONObject jsonContent = JSON.parseObject(catalogContent);
+            int code = jsonContent.getIntValue("code");
+            if (0 != code) {
+                return result;
+            }
+            JSONArray volumeArr = jsonContent.getJSONObject("data").getJSONArray("vs");
+            int volumeSize = volumeArr.size();
+            // 解析卷
+            for (int i = 0; i < volumeSize; i++) {
+                JSONObject volume = volumeArr.getJSONObject(i);
+                String volumeName = volume.getString("vN");
+                // 解析目录
+                JSONArray catalogArr = volume.getJSONArray("cs");
+                int catalogSize = catalogArr.size();
+                for (int n = 0; n < catalogSize; n++) {
+                    JSONObject catalogObj = catalogArr.getJSONObject(n);
+                    NovelCatalog novelCatalog = new NovelCatalog();
+                    // 设置目录名称
+                    String catalogName = catalogObj.getString("cN");
+                    novelCatalog.setName(catalogName);
+                    novelCatalog.setShowName(reviseName(catalogName));
+                    // 设置所在卷宗名称
+                    novelCatalog.setVolumeName(volumeName);
+                    // 设置目录的唯一标识
+                    novelCatalog.setSourceId(catalogObj.getString("cU"));
+                    // 设置目录总字数
+                    novelCatalog.setWordCount(catalogObj.getIntValue("cnt"));
+                    // 是否是vip
+                    novelCatalog.setVip(catalogObj.getIntValue("sS") == 0);
+                    //设置发布时间
+                    novelCatalog.setPubTime(DateUtil.parse(catalogObj.getString("uT"), DateUtil.LONG_FORMAT));
+                    // 设置唯一标识
+                    novelCatalog.setUuid(UUID.randomUUID().toString());
+                    result.add(novelCatalog);
                 }
             }
-            // 设置是否是vip
-            Element nextEle = vo.nextElementSibling();
-            if (nextEle == null) {
-                catalog.setSpiderDate(new Date());
-                catalog.setMark(true);
-            } else {
-                catalog.setVip(true);
-            }
-            result.add(catalog);
-        });
-
-
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
         return result;
     }
 

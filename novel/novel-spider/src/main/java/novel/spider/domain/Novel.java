@@ -3,6 +3,7 @@ package novel.spider.domain;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by wangxiaodan on 2018/7/5.
@@ -12,20 +13,17 @@ public class Novel {
     private String alias;
     private String author; // 图书作者
     private String coverPhoto; // 图书封面图片
-    private float score;
     private String intro; // 简短介绍
     private String desc;//图书介绍
     private String parentTypes; // 父级分类
     private String sonTypes; // 子分类
     // 图书进度状态true：连载  false：完本
     private boolean stat;
-    private int recommend; // 图书总推荐
-    private int recommendWeek; // 图书周推荐
-    private String sources;
-    private String sourcesId;
+    private String sources;// 图书url
+    private String sourceId; // 在原网站中的唯一标识
+    private String uuid; // 自己生成，用于识别关系
     private int wordCount; // '图书总字数'
-    private Date spiderDate; // '最新采集时间'
-
+    private List<String> labelList;
 
     public String getName() {
         return name;
@@ -57,14 +55,6 @@ public class Novel {
 
     public void setCoverPhoto(String coverPhoto) {
         this.coverPhoto = coverPhoto;
-    }
-
-    public float getScore() {
-        return score;
-    }
-
-    public void setScore(float score) {
-        this.score = score;
     }
 
     public String getIntro() {
@@ -107,22 +97,6 @@ public class Novel {
         this.stat = stat;
     }
 
-    public int getRecommend() {
-        return recommend;
-    }
-
-    public void setRecommend(int recommend) {
-        this.recommend = recommend;
-    }
-
-    public int getRecommendWeek() {
-        return recommendWeek;
-    }
-
-    public void setRecommendWeek(int recommendWeek) {
-        this.recommendWeek = recommendWeek;
-    }
-
     public String getSources() {
         return sources;
     }
@@ -131,12 +105,20 @@ public class Novel {
         this.sources = sources;
     }
 
-    public String getSourcesId() {
-        return sourcesId;
+    public String getSourceId() {
+        return sourceId;
     }
 
-    public void setSourcesId(String sourcesId) {
-        this.sourcesId = sourcesId;
+    public void setSourceId(String sourceId) {
+        this.sourceId = sourceId;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public int getWordCount() {
@@ -147,16 +129,21 @@ public class Novel {
         this.wordCount = wordCount;
     }
 
-    public Date getSpiderDate() {
-        return spiderDate;
+
+    public List<String> getLabelList() {
+        return labelList;
     }
 
-    public void setSpiderDate(Date spiderDate) {
-        this.spiderDate = spiderDate;
+    public void setLabelList(List<String> labelList) {
+        this.labelList = labelList;
     }
 
     @Override
     public String toString() {
+
+
+
         return ToStringBuilder.reflectionToString(this).toString();
     }
+
 }

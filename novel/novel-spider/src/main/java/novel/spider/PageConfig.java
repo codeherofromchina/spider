@@ -2,6 +2,8 @@ package novel.spider;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.nio.charset.Charset;
+
 /**
  * Created by wangxiaodan on 2018/7/5.
  */
@@ -9,7 +11,7 @@ public class PageConfig {
     private static final int DEFAULT_PAGE = 1;
     private static final int DEFAULT_TOTAL_PAGES = -1;
     private static final int DEFAULT_PAGE_SIZE = 20;
-    private static final int DEFAULT_THREAD_NUM = 1;
+    private static final int DEFAULT_THREAD_NUM = 10;
 
     public PageConfig() {
     }
@@ -73,6 +75,14 @@ public class PageConfig {
         return String.format(listUrlPattern, page, pageSize);
     }
 
+    public void setDefaultCharset(Charset defaultCharset) {
+        this.defaultCharset = defaultCharset;
+    }
+
+    public Charset getDefaultCharset() {
+        return defaultCharset;
+    }
+
     /**
      * 获取下一页的请求页面
      * 副作用是将当前页码加1
@@ -122,6 +132,8 @@ public class PageConfig {
     private String catalogUrlPattern;
     // 内容页URL格式
     private String contentUrlPattern;
+    // 网站默认字符集
+    private Charset defaultCharset;
     // 内容解析器
     private Parser parser;
     // 爬取内容的线程数

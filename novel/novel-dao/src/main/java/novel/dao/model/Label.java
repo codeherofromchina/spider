@@ -1,7 +1,5 @@
 package novel.dao.model;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
 import java.util.Date;
 
 public class Label {
@@ -53,11 +51,5 @@ public class Label {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
-    }
-
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this).toString();
     }
 }
