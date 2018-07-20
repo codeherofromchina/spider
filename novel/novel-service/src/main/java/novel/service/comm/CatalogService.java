@@ -6,6 +6,7 @@ import novel.dao.model.CatalogExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -79,5 +80,22 @@ public class CatalogService {
             return catalogs.get(0);
         }
         return null;
+    }
+
+    /**
+     * 查询图书目录
+     *
+     * @param bookId
+     * @return
+     */
+    public List<Catalog> findByBookId(Integer bookId) {
+        CatalogExample example = new CatalogExample();
+        CatalogExample.Criteria criteria = example.createCriteria();
+        criteria.andBookIdEqualTo(bookId);
+        List<Catalog> catalogs = catalogMapper.selectByExample(example);
+        if (catalogs == null) {
+            catalogs = new ArrayList<>();
+        }
+        return catalogs;
     }
 }

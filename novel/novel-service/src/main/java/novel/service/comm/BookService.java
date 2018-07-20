@@ -6,6 +6,7 @@ import novel.dao.model.BookExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -82,6 +83,7 @@ public class BookService {
 
     /**
      * 设置图书的采集时间和采集标记
+     *
      * @param bookId
      */
     public void updateSpiderMarkAndDate(Integer bookId) {
@@ -90,5 +92,18 @@ public class BookService {
         book.setMark(true);
         book.setSpiderDate(new Date());
         bookMapper.updateByPrimaryKeySelective(book);
+    }
+
+    /**
+     * 查询所有图书列表
+     *
+     * @return
+     */
+    public List<Book> list() {
+        List<Book> books = bookMapper.selectByExample(null);
+        if (books == null) {
+            books = new ArrayList<>();
+        }
+        return books;
     }
 }

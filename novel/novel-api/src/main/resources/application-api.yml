@@ -1,2 +1,9 @@
 server:
-  port: 8080
+  port: 8082
+
+spring:
+  resources:
+    chain:
+      cache: false # 好像不起作用。。。
+      gzipped: true  # 开启gzip压缩
+    cache-period: 0 # 资源缓存时间，单位秒

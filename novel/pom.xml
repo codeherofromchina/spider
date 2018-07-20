@@ -15,6 +15,7 @@
         <module>novel-dao</module>
         <module>novel-api</module>
         <module>novel-admin</module>
+        <module>novel-cms</module>
     </modules>
     <packaging>pom</packaging>
 

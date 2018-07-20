@@ -1,5 +1,8 @@
 package novel.dao.model;
 
+import com.alibaba.fastjson.JSON;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import java.util.Date;
 
 public class Catalog {
@@ -151,5 +154,11 @@ public class Catalog {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+
+    @Override
+    public String toString() {
+        return JSON.toJSONString(this);
     }
 }
