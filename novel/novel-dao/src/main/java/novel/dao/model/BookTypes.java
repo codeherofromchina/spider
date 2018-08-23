@@ -1,6 +1,10 @@
 package novel.dao.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class BookTypes {
     private Integer id;
@@ -15,7 +19,10 @@ public class BookTypes {
 
     private Integer clazz;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
+
+    private List<BookTypes> children;
 
     public Integer getId() {
         return id;
@@ -71,5 +78,21 @@ public class BookTypes {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+
+    public List<BookTypes> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<BookTypes> children) {
+        this.children = children;
+    }
+
+    public void addChildren(BookTypes bookTypes){
+        if (this.children == null) {
+            this.children = new ArrayList<>();
+        }
+        this.children.add(bookTypes);
     }
 }

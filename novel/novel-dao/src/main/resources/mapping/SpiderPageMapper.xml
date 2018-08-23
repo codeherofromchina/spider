@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="novel.dao.mapper.SpiderPageMapper" >
+  <resultMap id="BaseResultMap" type="novel.dao.model.SpiderPage" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="page_name" property="pageName" jdbcType="VARCHAR" />
+    <result column="run_status" property="runStatus" jdbcType="INTEGER" />
+    <result column="default_charset" property="defaultCharset" jdbcType="VARCHAR" />
+    <result column="start_url" property="startUrl" jdbcType="VARCHAR" />
+    <result column="catalog_url_pattern" property="catalogUrlPattern" jdbcType="VARCHAR" />
+    <result column="content_url_pattern" property="contentUrlPattern" jdbcType="VARCHAR" />
+    <result column="spider_web_id" property="spiderWebId" jdbcType="INTEGER" />
+    <result column="spider_parser_id" property="spiderParserId" jdbcType="INTEGER" />
+    <result column="spider_web_name" property="spiderWebName" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, page_name, run_status, default_charset, start_url, catalog_url_pattern, content_url_pattern, 
+    spider_web_id, spider_parser_id, spider_web_name, create_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="novel.dao.model.SpiderPageExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from spider_page
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from spider_page
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from spider_page
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="novel.dao.model.SpiderPageExample" >
+    delete from spider_page
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="novel.dao.model.SpiderPage" >
+    insert into spider_page (id, page_name, run_status, 
+      default_charset, start_url, catalog_url_pattern, 
+      content_url_pattern, spider_web_id, spider_parser_id, 
+      spider_web_name, create_time)
+    values (#{id,jdbcType=INTEGER}, #{pageName,jdbcType=VARCHAR}, #{runStatus,jdbcType=INTEGER}, 
+      #{defaultCharset,jdbcType=VARCHAR}, #{startUrl,jdbcType=VARCHAR}, #{catalogUrlPattern,jdbcType=VARCHAR}, 
+      #{contentUrlPattern,jdbcType=VARCHAR}, #{spiderWebId,jdbcType=INTEGER}, #{spiderParserId,jdbcType=INTEGER}, 
+      #{spiderWebName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="novel.dao.model.SpiderPage" >
+    insert into spider_page
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="pageName != null" >
+        page_name,
+      </if>
+      <if test="runStatus != null" >
+        run_status,
+      </if>
+      <if test="defaultCharset != null" >
+        default_charset,
+      </if>
+      <if test="startUrl != null" >
+        start_url,
+      </if>
+      <if test="catalogUrlPattern != null" >
+        catalog_url_pattern,
+      </if>
+      <if test="contentUrlPattern != null" >
+        content_url_pattern,
+      </if>
+      <if test="spiderWebId != null" >
+        spider_web_id,
+      </if>
+      <if test="spiderParserId != null" >
+        spider_parser_id,
+      </if>
+      <if test="spiderWebName != null" >
+        spider_web_name,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="pageName != null" >
+        #{pageName,jdbcType=VARCHAR},
+      </if>
+      <if test="runStatus != null" >
+        #{runStatus,jdbcType=INTEGER},
+      </if>
+      <if test="defaultCharset != null" >
+        #{defaultCharset,jdbcType=VARCHAR},
+      </if>
+      <if test="startUrl != null" >
+        #{startUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="catalogUrlPattern != null" >
+        #{catalogUrlPattern,jdbcType=VARCHAR},
+      </if>
+      <if test="contentUrlPattern != null" >
+        #{contentUrlPattern,jdbcType=VARCHAR},
+      </if>
+      <if test="spiderWebId != null" >
+        #{spiderWebId,jdbcType=INTEGER},
+      </if>
+      <if test="spiderParserId != null" >
+        #{spiderParserId,jdbcType=INTEGER},
+      </if>
+      <if test="spiderWebName != null" >
+        #{spiderWebName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="novel.dao.model.SpiderPageExample" resultType="java.lang.Integer" >
+    select count(*) from spider_page
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update spider_page
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.pageName != null" >
+        page_name = #{record.pageName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.runStatus != null" >
+        run_status = #{record.runStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.defaultCharset != null" >
+        default_charset = #{record.defaultCharset,jdbcType=VARCHAR},
+      </if>
+      <if test="record.startUrl != null" >
+        start_url = #{record.startUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.catalogUrlPattern != null" >
+        catalog_url_pattern = #{record.catalogUrlPattern,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contentUrlPattern != null" >
+        content_url_pattern = #{record.contentUrlPattern,jdbcType=VARCHAR},
+      </if>
+      <if test="record.spiderWebId != null" >
+        spider_web_id = #{record.spiderWebId,jdbcType=INTEGER},
+      </if>
+      <if test="record.spiderParserId != null" >
+        spider_parser_id = #{record.spiderParserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.spiderWebName != null" >
+        spider_web_name = #{record.spiderWebName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update spider_page
+    set id = #{record.id,jdbcType=INTEGER},
+      page_name = #{record.pageName,jdbcType=VARCHAR},
+      run_status = #{record.runStatus,jdbcType=INTEGER},
+      default_charset = #{record.defaultCharset,jdbcType=VARCHAR},
+      start_url = #{record.startUrl,jdbcType=VARCHAR},
+      catalog_url_pattern = #{record.catalogUrlPattern,jdbcType=VARCHAR},
+      content_url_pattern = #{record.contentUrlPattern,jdbcType=VARCHAR},
+      spider_web_id = #{record.spiderWebId,jdbcType=INTEGER},
+      spider_parser_id = #{record.spiderParserId,jdbcType=INTEGER},
+      spider_web_name = #{record.spiderWebName,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="novel.dao.model.SpiderPage" >
+    update spider_page
+    <set >
+      <if test="pageName != null" >
+        page_name = #{pageName,jdbcType=VARCHAR},
+      </if>
+      <if test="runStatus != null" >
+        run_status = #{runStatus,jdbcType=INTEGER},
+      </if>
+      <if test="defaultCharset != null" >
+        default_charset = #{defaultCharset,jdbcType=VARCHAR},
+      </if>
+      <if test="startUrl != null" >
+        start_url = #{startUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="catalogUrlPattern != null" >
+        catalog_url_pattern = #{catalogUrlPattern,jdbcType=VARCHAR},
+      </if>
+      <if test="contentUrlPattern != null" >
+        content_url_pattern = #{contentUrlPattern,jdbcType=VARCHAR},
+      </if>
+      <if test="spiderWebId != null" >
+        spider_web_id = #{spiderWebId,jdbcType=INTEGER},
+      </if>
+      <if test="spiderParserId != null" >
+        spider_parser_id = #{spiderParserId,jdbcType=INTEGER},
+      </if>
+      <if test="spiderWebName != null" >
+        spider_web_name = #{spiderWebName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="novel.dao.model.SpiderPage" >
+    update spider_page
+    set page_name = #{pageName,jdbcType=VARCHAR},
+      run_status = #{runStatus,jdbcType=INTEGER},
+      default_charset = #{defaultCharset,jdbcType=VARCHAR},
+      start_url = #{startUrl,jdbcType=VARCHAR},
+      catalog_url_pattern = #{catalogUrlPattern,jdbcType=VARCHAR},
+      content_url_pattern = #{contentUrlPattern,jdbcType=VARCHAR},
+      spider_web_id = #{spiderWebId,jdbcType=INTEGER},
+      spider_parser_id = #{spiderParserId,jdbcType=INTEGER},
+      spider_web_name = #{spiderWebName,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

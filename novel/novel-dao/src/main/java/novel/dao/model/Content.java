@@ -1,33 +1,34 @@
 package novel.dao.model;
 
 public class Content {
-    private Integer id;
+    private String catalog;
 
-    private Integer catalogId;
+    private String catalogUUID;
 
-    private String txt;
+    private String text;
 
-    public Integer getId() {
-        return id;
+
+    public String getCatalog() {
+        return catalog;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setCatalog(String catalog) {
+        this.catalog = catalog;
     }
 
-    public Integer getCatalogId() {
-        return catalogId;
+    public String getCatalogUUID() {
+        return catalogUUID;
     }
 
-    public void setCatalogId(Integer catalogId) {
-        this.catalogId = catalogId;
+    public void setCatalogUUID(String catalogUUID) {
+        this.catalogUUID = catalogUUID;
     }
 
-    public String getTxt() {
-        return txt;
+    public String getText() {
+        return text;
     }
 
-    public void setTxt(String txt) {
-        this.txt = txt;
+    public void setText(String text) {
+        this.text = text;
     }
 }

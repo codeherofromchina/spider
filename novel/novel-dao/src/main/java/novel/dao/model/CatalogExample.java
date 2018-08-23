@@ -375,6 +375,66 @@ public class CatalogExample {
             return (Criteria) this;
         }
 
+        public Criteria andVolumeNumIsNull() {
+            addCriterion("volume_num is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andVolumeNumIsNotNull() {
+            addCriterion("volume_num is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andVolumeNumEqualTo(Integer value) {
+            addCriterion("volume_num =", value, "volumeNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andVolumeNumNotEqualTo(Integer value) {
+            addCriterion("volume_num <>", value, "volumeNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andVolumeNumGreaterThan(Integer value) {
+            addCriterion("volume_num >", value, "volumeNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andVolumeNumGreaterThanOrEqualTo(Integer value) {
+            addCriterion("volume_num >=", value, "volumeNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andVolumeNumLessThan(Integer value) {
+            addCriterion("volume_num <", value, "volumeNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andVolumeNumLessThanOrEqualTo(Integer value) {
+            addCriterion("volume_num <=", value, "volumeNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andVolumeNumIn(List<Integer> values) {
+            addCriterion("volume_num in", values, "volumeNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andVolumeNumNotIn(List<Integer> values) {
+            addCriterion("volume_num not in", values, "volumeNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andVolumeNumBetween(Integer value1, Integer value2) {
+            addCriterion("volume_num between", value1, value2, "volumeNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andVolumeNumNotBetween(Integer value1, Integer value2) {
+            addCriterion("volume_num not between", value1, value2, "volumeNum");
+            return (Criteria) this;
+        }
+
         public Criteria andContentUrlIsNull() {
             addCriterion("content_url is null");
             return (Criteria) this;

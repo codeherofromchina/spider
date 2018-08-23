@@ -1,8 +1,5 @@
 package novel.dao.model;
 
-import com.alibaba.fastjson.JSON;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
 import java.util.Date;
 
 public class Catalog {
@@ -13,6 +10,8 @@ public class Catalog {
     private String showName;
 
     private String volumeName;
+
+    private Integer volumeNum;
 
     private String contentUrl;
 
@@ -66,6 +65,14 @@ public class Catalog {
 
     public void setVolumeName(String volumeName) {
         this.volumeName = volumeName;
+    }
+
+    public Integer getVolumeNum() {
+        return volumeNum;
+    }
+
+    public void setVolumeNum(Integer volumeNum) {
+        this.volumeNum = volumeNum;
     }
 
     public String getContentUrl() {
@@ -154,11 +161,5 @@ public class Catalog {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
-    }
-
-
-    @Override
-    public String toString() {
-        return JSON.toJSONString(this);
     }
 }

@@ -20,10 +20,11 @@ public class Novel {
     // 图书进度状态true：连载  false：完本
     private boolean stat;
     private String sources;// 图书url
-    private String sourceId; // 在原网站中的唯一标识
+    private String sourceId; // 在原网站中图书的唯一标识
     private String uuid; // 自己生成，用于识别关系
     private int wordCount; // '图书总字数'
     private List<String> labelList;
+    private Integer spiderWebId; // 网站
 
     public String getName() {
         return name;
@@ -138,11 +139,16 @@ public class Novel {
         this.labelList = labelList;
     }
 
+    public Integer getSpiderWebId() {
+        return spiderWebId;
+    }
+
+    public void setSpiderWebId(Integer spiderWebId) {
+        this.spiderWebId = spiderWebId;
+    }
+
     @Override
     public String toString() {
-
-
-
         return ToStringBuilder.reflectionToString(this).toString();
     }
 

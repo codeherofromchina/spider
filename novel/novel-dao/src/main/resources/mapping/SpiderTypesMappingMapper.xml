@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="novel.dao.mapper.SpiderTypesMappingMapper" >
+  <resultMap id="BaseResultMap" type="novel.dao.model.SpiderTypesMapping" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="spider_web_id" property="spiderWebId" jdbcType="INTEGER" />
+    <result column="original_types" property="originalTypes" jdbcType="VARCHAR" />
+    <result column="book_types_id" property="bookTypesId" jdbcType="INTEGER" />
+    <result column="book_types_name" property="bookTypesName" jdbcType="VARCHAR" />
+    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+    <result column="seq" property="seq" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, spider_web_id, original_types, book_types_id, book_types_name, parent_id, seq, 
+    state
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="novel.dao.model.SpiderTypesMappingExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from spider_types_mapping
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from spider_types_mapping
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from spider_types_mapping
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="novel.dao.model.SpiderTypesMappingExample" >
+    delete from spider_types_mapping
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="novel.dao.model.SpiderTypesMapping" >
+    insert into spider_types_mapping (id, spider_web_id, original_types, 
+      book_types_id, book_types_name, parent_id, 
+      seq, state)
+    values (#{id,jdbcType=INTEGER}, #{spiderWebId,jdbcType=INTEGER}, #{originalTypes,jdbcType=VARCHAR}, 
+      #{bookTypesId,jdbcType=INTEGER}, #{bookTypesName,jdbcType=VARCHAR}, #{parentId,jdbcType=INTEGER}, 
+      #{seq,jdbcType=INTEGER}, #{state,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id"  parameterType="novel.dao.model.SpiderTypesMapping" >
+    insert into spider_types_mapping
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="spiderWebId != null" >
+        spider_web_id,
+      </if>
+      <if test="originalTypes != null" >
+        original_types,
+      </if>
+      <if test="bookTypesId != null" >
+        book_types_id,
+      </if>
+      <if test="bookTypesName != null" >
+        book_types_name,
+      </if>
+      <if test="parentId != null" >
+        parent_id,
+      </if>
+      <if test="seq != null" >
+        seq,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="spiderWebId != null" >
+        #{spiderWebId,jdbcType=INTEGER},
+      </if>
+      <if test="originalTypes != null" >
+        #{originalTypes,jdbcType=VARCHAR},
+      </if>
+      <if test="bookTypesId != null" >
+        #{bookTypesId,jdbcType=INTEGER},
+      </if>
+      <if test="bookTypesName != null" >
+        #{bookTypesName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="seq != null" >
+        #{seq,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="novel.dao.model.SpiderTypesMappingExample" resultType="java.lang.Integer" >
+    select count(*) from spider_types_mapping
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update spider_types_mapping
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.spiderWebId != null" >
+        spider_web_id = #{record.spiderWebId,jdbcType=INTEGER},
+      </if>
+      <if test="record.originalTypes != null" >
+        original_types = #{record.originalTypes,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bookTypesId != null" >
+        book_types_id = #{record.bookTypesId,jdbcType=INTEGER},
+      </if>
+      <if test="record.bookTypesName != null" >
+        book_types_name = #{record.bookTypesName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parentId != null" >
+        parent_id = #{record.parentId,jdbcType=INTEGER},
+      </if>
+      <if test="record.seq != null" >
+        seq = #{record.seq,jdbcType=INTEGER},
+      </if>
+      <if test="record.state != null" >
+        state = #{record.state,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update spider_types_mapping
+    set id = #{record.id,jdbcType=INTEGER},
+      spider_web_id = #{record.spiderWebId,jdbcType=INTEGER},
+      original_types = #{record.originalTypes,jdbcType=VARCHAR},
+      book_types_id = #{record.bookTypesId,jdbcType=INTEGER},
+      book_types_name = #{record.bookTypesName,jdbcType=VARCHAR},
+      parent_id = #{record.parentId,jdbcType=INTEGER},
+      seq = #{record.seq,jdbcType=INTEGER},
+      state = #{record.state,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="novel.dao.model.SpiderTypesMapping" >
+    update spider_types_mapping
+    <set >
+      <if test="spiderWebId != null" >
+        spider_web_id = #{spiderWebId,jdbcType=INTEGER},
+      </if>
+      <if test="originalTypes != null" >
+        original_types = #{originalTypes,jdbcType=VARCHAR},
+      </if>
+      <if test="bookTypesId != null" >
+        book_types_id = #{bookTypesId,jdbcType=INTEGER},
+      </if>
+      <if test="bookTypesName != null" >
+        book_types_name = #{bookTypesName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        parent_id = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="seq != null" >
+        seq = #{seq,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="novel.dao.model.SpiderTypesMapping" >
+    update spider_types_mapping
+    set spider_web_id = #{spiderWebId,jdbcType=INTEGER},
+      original_types = #{originalTypes,jdbcType=VARCHAR},
+      book_types_id = #{bookTypesId,jdbcType=INTEGER},
+      book_types_name = #{bookTypesName,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=INTEGER},
+      seq = #{seq,jdbcType=INTEGER},
+      state = #{state,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

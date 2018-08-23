@@ -35,4 +35,31 @@ public interface SerializationService {
      * @return
      */
     boolean contentSerialize(String content, String catalogUuid);
+
+
+    void spiderSimpleBookDone(boolean flag, Integer spiderPageId);
+
+    /**
+     * 保存列表爬虫当前页面，并返回是否继续标志
+     * @param spiderListId
+     * @param currentPage
+     * @return
+     */
+    boolean spiderListCurrentPageDone(Integer spiderListId, int currentPage);
+
+    /**
+     * 停止列表爬虫采集
+     * @param spiderListId
+     */
+    void spiderListBookDone(Integer spiderListId);
+
+    /**
+     * 停止列表页面信息采集
+     */
+    void stopListPageSpider();
+
+    /**
+     * 停止单页面信息采集
+     */
+    void stopSinglePageSpider();
 }

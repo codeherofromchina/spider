@@ -106,4 +106,17 @@ public class BookService {
         }
         return books;
     }
+
+    /**
+     * 查看图书的UUID是否已经存在
+     *
+     * @param uuid
+     * @return true:存在  false:不存在
+     */
+    public boolean existUUID(String uuid) {
+        BookExample example = new BookExample();
+        example.createCriteria().andUuidEqualTo(uuid);
+        int i = bookMapper.countByExample(example);
+        return i > 0;
+    }
 }

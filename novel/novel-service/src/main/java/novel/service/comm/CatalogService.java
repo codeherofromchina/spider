@@ -1,6 +1,7 @@
 package novel.service.comm;
 
 import novel.dao.mapper.CatalogMapper;
+import novel.dao.model.BookExample;
 import novel.dao.model.Catalog;
 import novel.dao.model.CatalogExample;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,5 +98,12 @@ public class CatalogService {
             catalogs = new ArrayList<>();
         }
         return catalogs;
+    }
+
+    public boolean existUUID(String uuid) {
+        CatalogExample example = new CatalogExample();
+        example.createCriteria().andUuidEqualTo(uuid);
+        int i = catalogMapper.countByExample(example);
+        return i > 0;
     }
 }

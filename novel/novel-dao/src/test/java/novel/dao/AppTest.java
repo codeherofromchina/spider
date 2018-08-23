@@ -1,7 +1,11 @@
 package novel.dao;
 
+import com.alibaba.fastjson.JSON;
 import novel.dao.mapper.LabelMapper;
+import novel.dao.mapper.SpiderWebMapper;
 import novel.dao.model.Label;
+import novel.dao.model.SpiderWeb;
+import novel.dao.oss.OSSHelper;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,12 +20,16 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public class AppTest {
     @Autowired
-    private LabelMapper labelMapper;
+    private SpiderWebMapper spiderWebMapper;
+    @Autowired
+    private OSSHelper ossHelper;
 
     @Test
     public void findOne() throws Exception {
-        Label label = labelMapper.selectByPrimaryKey(1);
-        System.out.println(label);
-        Assert.assertEquals("暴力", label.getName());
+        SpiderWeb web = spiderWebMapper.selectByPrimaryKey(1);
+        System.out.println(JSON.toJSONString(web));
+        Assert.assertEquals("起点中文网", web.getWebName());
     }
+
+
 }

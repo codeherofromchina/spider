@@ -6,6 +6,7 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="show_name" property="showName" jdbcType="VARCHAR" />
     <result column="volume_name" property="volumeName" jdbcType="VARCHAR" />
+    <result column="volume_num" property="volumeNum" jdbcType="INTEGER" />
     <result column="content_url" property="contentUrl" jdbcType="VARCHAR" />
     <result column="book_id" property="bookId" jdbcType="INTEGER" />
     <result column="word_count" property="wordCount" jdbcType="INTEGER" />
@@ -77,7 +78,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, `name`, show_name, volume_name, content_url, book_id, word_count, catalog_num,
+    id, name, show_name, volume_name, volume_num, content_url, book_id, word_count, catalog_num, 
     pub_time, mark, del_flag, sources_id, uuid, spider_date, create_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="novel.dao.model.CatalogExample" >
@@ -111,16 +112,18 @@
     </if>
   </delete>
   <insert id="insert" parameterType="novel.dao.model.Catalog" >
-    insert into catalog (id, `name`, show_name,
-      volume_name, content_url, book_id, 
-      word_count, catalog_num, pub_time, 
-      mark, del_flag, sources_id, uuid, 
-      spider_date, create_time)
+    insert into catalog (id, name, show_name, 
+      volume_name, volume_num, content_url, 
+      book_id, word_count, catalog_num, 
+      pub_time, mark, del_flag, sources_id, 
+      uuid, spider_date, create_time
+      )
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{showName,jdbcType=VARCHAR}, 
-      #{volumeName,jdbcType=VARCHAR}, #{contentUrl,jdbcType=VARCHAR}, #{bookId,jdbcType=INTEGER}, 
-      #{wordCount,jdbcType=INTEGER}, #{catalogNum,jdbcType=INTEGER}, #{pubTime,jdbcType=TIMESTAMP}, 
-      #{mark,jdbcType=BIT}, #{delFlag,jdbcType=BIT}, #{sourcesId,jdbcType=VARCHAR}, #{uuid,jdbcType=VARCHAR}, 
-      #{spiderDate,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP})
+      #{volumeName,jdbcType=VARCHAR}, #{volumeNum,jdbcType=INTEGER}, #{contentUrl,jdbcType=VARCHAR}, 
+      #{bookId,jdbcType=INTEGER}, #{wordCount,jdbcType=INTEGER}, #{catalogNum,jdbcType=INTEGER}, 
+      #{pubTime,jdbcType=TIMESTAMP}, #{mark,jdbcType=BIT}, #{delFlag,jdbcType=BIT}, #{sourcesId,jdbcType=VARCHAR}, 
+      #{uuid,jdbcType=VARCHAR}, #{spiderDate,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="novel.dao.model.Catalog" >
     insert into catalog
@@ -129,13 +132,16 @@
         id,
       </if>
       <if test="name != null" >
-        `name`,
+        name,
       </if>
       <if test="showName != null" >
         show_name,
       </if>
       <if test="volumeName != null" >
         volume_name,
+      </if>
+      <if test="volumeNum != null" >
+        volume_num,
       </if>
       <if test="contentUrl != null" >
         content_url,
@@ -183,6 +189,9 @@
       </if>
       <if test="volumeName != null" >
         #{volumeName,jdbcType=VARCHAR},
+      </if>
+      <if test="volumeNum != null" >
+        #{volumeNum,jdbcType=INTEGER},
       </if>
       <if test="contentUrl != null" >
         #{contentUrl,jdbcType=VARCHAR},
@@ -232,13 +241,16 @@
         id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.name != null" >
-        `name` = #{record.name,jdbcType=VARCHAR},
+        name = #{record.name,jdbcType=VARCHAR},
       </if>
       <if test="record.showName != null" >
         show_name = #{record.showName,jdbcType=VARCHAR},
       </if>
       <if test="record.volumeName != null" >
         volume_name = #{record.volumeName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.volumeNum != null" >
+        volume_num = #{record.volumeNum,jdbcType=INTEGER},
       </if>
       <if test="record.contentUrl != null" >
         content_url = #{record.contentUrl,jdbcType=VARCHAR},
@@ -281,9 +293,10 @@
   <update id="updateByExample" parameterType="map" >
     update catalog
     set id = #{record.id,jdbcType=INTEGER},
-      `name` = #{record.name,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
       show_name = #{record.showName,jdbcType=VARCHAR},
       volume_name = #{record.volumeName,jdbcType=VARCHAR},
+      volume_num = #{record.volumeNum,jdbcType=INTEGER},
       content_url = #{record.contentUrl,jdbcType=VARCHAR},
       book_id = #{record.bookId,jdbcType=INTEGER},
       word_count = #{record.wordCount,jdbcType=INTEGER},
@@ -303,13 +316,16 @@
     update catalog
     <set >
       <if test="name != null" >
-        `name` = #{name,jdbcType=VARCHAR},
+        name = #{name,jdbcType=VARCHAR},
       </if>
       <if test="showName != null" >
         show_name = #{showName,jdbcType=VARCHAR},
       </if>
       <if test="volumeName != null" >
         volume_name = #{volumeName,jdbcType=VARCHAR},
+      </if>
+      <if test="volumeNum != null" >
+        volume_num = #{volumeNum,jdbcType=INTEGER},
       </if>
       <if test="contentUrl != null" >
         content_url = #{contentUrl,jdbcType=VARCHAR},
@@ -349,9 +365,10 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="novel.dao.model.Catalog" >
     update catalog
-    set `name` = #{name,jdbcType=VARCHAR},
+    set name = #{name,jdbcType=VARCHAR},
       show_name = #{showName,jdbcType=VARCHAR},
       volume_name = #{volumeName,jdbcType=VARCHAR},
+      volume_num = #{volumeNum,jdbcType=INTEGER},
       content_url = #{contentUrl,jdbcType=VARCHAR},
       book_id = #{bookId,jdbcType=INTEGER},
       word_count = #{wordCount,jdbcType=INTEGER},

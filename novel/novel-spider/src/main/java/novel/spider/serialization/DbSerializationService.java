@@ -1,12 +1,15 @@
 package novel.spider.serialization;
 
+import com.alibaba.fastjson.JSONObject;
 import novel.dao.model.Book;
 import novel.dao.model.Catalog;
 import novel.dao.model.Content;
+import novel.dao.model.SpiderPage;
 import novel.service.comm.*;
 import novel.spider.SerializationService;
 import novel.spider.domain.Novel;
 import novel.spider.domain.NovelCatalog;
+import novel.spider.util.SpiderUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,18 +21,20 @@ import java.util.List;
  */
 @Component("dbSerialization")
 public class DbSerializationService implements SerializationService {
-    // 图书重复采集时间，12小时就可以再次采集一次
-    private static final long SPIDER_BOOK_INTERVAL = 5 * 24 * 60 * 60 * 1000;
     @Autowired
     private BookService bookService;
-    @Autowired
-    private BookTypesService typesService;
     @Autowired
     private LabelService labelService;
     @Autowired
     private CatalogService catalogService;
     @Autowired
     private ContentService contentService;
+    @Autowired
+    private SpiderPageService spiderPageService;
+    @Autowired
+    private SpiderListService spiderListService;
+    @Autowired
+    private SpiderTypesMappingService spiderTypesMappingService;
 
     /**
      * 持久化小说信息
@@ -39,28 +44,33 @@ public class DbSerializationService implements SerializationService {
      */
     public boolean novelSerialize(Novel novel) {
         try {
-            // 持久化分类
-            Integer typesId = typesService.insertBookTypes(novel.getParentTypes(), novel.getSonTypes());
+            // 准备工作
+            Integer typesId = spiderTypesMappingService.findMapping(novel.getSpiderWebId(), novel.getParentTypes(), novel.getSonTypes());
+            String uuid;
+            Date now = new Date();
+            do {
+                uuid = SpiderUtils.uuid();
+            } while (bookService.existUUID(uuid));
+
             // 持久化图书
             Book book = bookService.findByNameAndAuthor(novel.getName(), novel.getAuthor());
             if (book == null) {
+                novel.setUuid(uuid);
                 // 如果不存在图书，则插入分类
                 book = new Book();
-                book.setCreateTime(new Date());
                 novelSet2Book(book, novel);
+                book.setCreateTime(now);
                 book.setBookTypesId(typesId);
+                book.setSpiderDate(now);
                 if (!bookService.insert(book)) {
                     return false;
                 }
             } else {
+                novel.setUuid(book.getUuid());
                 // 检查采集时间，并做相应更新
-                Date oldSpiderDate = book.getSpiderDate();
-                if (!isPassSpiderTime(oldSpiderDate, new Date(), SPIDER_BOOK_INTERVAL)) {
-                    // 数据还新鲜
-                    return false;
-                }
                 novelSet2Book(book, novel);
                 book.setBookTypesId(typesId);
+                book.setSpiderDate(now);
                 if (!bookService.update(book)) {
                     return false;
                 }
@@ -94,36 +104,40 @@ public class DbSerializationService implements SerializationService {
             }
             Integer bookId = book.getId();
             // 查看目录是否存在且被爬取过去
-            Catalog catalog = catalogService.findByBookIdAndName(bookId,novelCatalog.getName(),novelCatalog.getShowName());
+            Catalog catalog = catalogService.findByBookIdAndName(bookId, novelCatalog.getName(), novelCatalog.getShowName());
             if (catalog != null) {
                 // 目录存在
                 Boolean mark = catalog.getMark();
                 if (mark != null && mark) {
                     return false; // 不用重新爬取
-                } else {
-                    novelCatalog.setUuid(catalog.getUuid());
                 }
             } else {
+                String uuid;
+                do {
+                    uuid = SpiderUtils.uuid();
+                } while (catalogService.existUUID(uuid));
                 // 目录不存在，新建目录
                 catalog = new Catalog();
                 catalog.setName(novelCatalog.getName());
                 catalog.setShowName(novelCatalog.getShowName());
                 catalog.setVolumeName(novelCatalog.getVolumeName());
+                catalog.setVolumeNum(novelCatalog.getVolumeNum());
                 catalog.setBookId(bookId);
                 catalog.setWordCount(novelCatalog.getWordCount());
+                catalog.setCatalogNum(novelCatalog.getCatalogNum());
                 catalog.setPubTime(novelCatalog.getPubTime());
                 catalog.setMark(false);
                 catalog.setDelFlag(false);
                 catalog.setSourcesId(novelCatalog.getSourceId());
-                catalog.setUuid(novelCatalog.getUuid());
+                catalog.setContentUrl(novelCatalog.getSourceUrl());
+                catalog.setUuid(uuid);
                 catalog.setCreateTime(new Date());
                 boolean insertFlag = catalogService.insert(catalog);
                 if (!insertFlag) {
                     return false;
                 }
             }
-            // 设置book为已爬取
-            bookService.updateSpiderMarkAndDate(bookId);
+            novelCatalog.setUuid(catalog.getUuid());
             return true;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -150,8 +164,9 @@ public class DbSerializationService implements SerializationService {
             Integer catalogId = catalog.getId();
             // 保存内容
             Content content = new Content();
-            content.setCatalogId(catalogId);
-            content.setTxt(text);
+            content.setCatalog(String.valueOf(catalog.getBookId()));
+            content.setCatalogUUID(catalogUuid);
+            content.setText(text);
 
             boolean insertFlag = contentService.insert(content);
             if (!insertFlag) {
@@ -166,24 +181,33 @@ public class DbSerializationService implements SerializationService {
         return false;
     }
 
-    /**
-     * 检查是否在再次采集时间外
-     *
-     * @param oldSpiderDate 老数据采集时间
-     * @param newSpiderDate 新数据采集时间
-     * @param passTime      间隔多长ms可以重新采集
-     * @return
-     */
-    private boolean isPassSpiderTime(Date oldSpiderDate, Date newSpiderDate, long passTime) {
-        if (oldSpiderDate == null) {
-            return true;
-        }
-        if (newSpiderDate == null) {
-            newSpiderDate = new Date();
-        }
-        return (newSpiderDate.getTime() - oldSpiderDate.getTime()) >= passTime;
 
+
+    @Override
+    public void spiderSimpleBookDone(boolean flag, Integer spiderPageId) {
+        spiderPageService.updateRunStatus(flag ? SpiderPage.RunStatusEnum.DONE : SpiderPage.RunStatusEnum.WAIT, spiderPageId);
     }
+
+    @Override
+    public void stopSinglePageSpider() {
+        spiderPageService.stopSpider();
+    }
+
+    @Override
+    public void spiderListBookDone(Integer spiderListId) {
+        spiderListService.stopSpider(spiderListId);
+    }
+
+    @Override
+    public void stopListPageSpider() {
+        spiderListService.stopSpider();
+    }
+
+    @Override
+    public boolean spiderListCurrentPageDone(Integer spiderListId, int currentPage) {
+        return spiderListService.doneOnePage(spiderListId, currentPage);
+    }
+
 
     /**
      * 将小说信息设置到图书中
@@ -203,6 +227,9 @@ public class DbSerializationService implements SerializationService {
         book.setUuid(novel.getUuid());
         book.setWordCount(novel.getWordCount());
         book.setStat(novel.isStat());
+        JSONObject remark = new JSONObject();
+        remark.put("parentTypes", novel.getParentTypes());
+        remark.put("sonTypes", novel.getSonTypes());
+        book.setRemarks(remark.toJSONString());
     }
-
 }

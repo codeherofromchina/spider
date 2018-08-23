@@ -35,6 +35,8 @@ public class Book {
 
     private Date createTime;
 
+    private String remarks;
+
     public Integer getId() {
         return id;
     }
@@ -161,5 +163,13 @@ public class Book {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 }

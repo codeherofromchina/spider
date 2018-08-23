@@ -1,96 +1,161 @@
-1:起点网
-	获取列表页面：https://www.qidian.com/free
-	获取免费图书列表页面：https://www.qidian.com/free
-	获取图书介绍及其封面：https://book.qidian.com/info/3602691
-	获取图书目录接口：https://book.qidian.com/ajax/book/category?bookId=1003694333
-	获取图书内容页面：https://read.qidian.com/chapter/iHBVJ0Mlhkw1/hMNLY_o2zHYex0RJOkJclQ2
-2：笔趣阁 https://www.biquwu.cc/biquge/42_42541/c17527774.html
+-- MySQL dump 10.13  Distrib 5.7.17, for macos10.12 (x86_64)
+--
+-- Host: localhost    Database: test
+-- ------------------------------------------------------
+-- Server version	5.7.17
 
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-drop table if exists sources;
-create table sources(
-	id int AUTO_INCREMENT primary key,
-    `name` varchar(200) unique comment '名称',
-    url varchar(500) comment '首页' 
-) comment '图书来源';
+--
+-- Table structure for table `book`
+--
 
-drop table if exists types;
-create table types (
-	id int AUTO_INCREMENT primary key,
-    `name` varchar(200) unique comment '分类名称',
-    parent_id int comment '父级id' REFERENCES types(id) ,
-    seq int comment '排序序列号',
-    pic varchar(250) comment '分类图标',
-    class int default 0 comment '分类所属种类0：默认  1：男生  2：女生  3：出版',
-    del_flag bit default 0 comment '是否删除 0：未删除 1：已删除',
-    create_time date comment '创建时间'
-) comment '图书分类';
+DROP TABLE IF EXISTS `book`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `book` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) DEFAULT NULL COMMENT '图书名称',
+  `alias` varchar(500) DEFAULT NULL COMMENT '图书别名，多个用分号分隔',
+  `author` varchar(200) DEFAULT NULL COMMENT '图书作者',
+  `intro` varchar(200) DEFAULT NULL COMMENT '简明扼要的介绍',
+  `desc` varchar(1000) DEFAULT NULL COMMENT '介绍',
+  `cover_photo` varchar(500) DEFAULT NULL COMMENT '图书封面图片',
+  `sources` varchar(500) DEFAULT NULL COMMENT '图书来源url',
+  `sources_id` varchar(500) DEFAULT NULL COMMENT '图书在源网站中的唯一标识',
+  `uuid` varchar(200) DEFAULT NULL COMMENT '采集中的唯一标识，采集中识别关系',
+  `book_types_id` int(11) DEFAULT NULL COMMENT '图书所属分类',
+  `word_count` int(11) DEFAULT NULL COMMENT '图书总字数',
+  `stat` bit(1) DEFAULT b'0' COMMENT '图书进度状态1：连载  0：完本',
+  `mark` bit(1) DEFAULT b'0' COMMENT '是否已经爬取，1：已经爬取，0：未爬取',
+  `spider_date` datetime DEFAULT NULL COMMENT '最新采集时间',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `tt` varchar(10) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uuid` (`uuid`),
+  UNIQUE KEY `unique_name_author` (`name`,`author`)
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8 COMMENT='图书表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-drop table if exists label;
-create table label (
-	id int AUTO_INCREMENT primary key,
-    `name` varchar(200) unique comment '标签名称',
-    seq int comment '排序序列号',
-    book_num int default 0 comment '图书数量',
-    create_time date comment '创建时间'
-) comment '图书标签';
+--
+-- Table structure for table `book_label`
+--
 
-drop table if exists book;
-create table book (
-	id int AUTO_INCREMENT primary key,
-    `name` varchar(200) comment '图书名称',
-    `alias` varchar(500) comment '图书别名，多个用分号分隔',
-    `author` varchar(200) comment '图书作者',
-    `intro` varchar(200) comment '简明扼要的介绍',
-    `desc` text comment '介绍',
-    `vip` bit default 0 comment '此本小说爬取是否需要vip，如果是说明小说爬取不全，1：vip  0:非vip',
-    `cover_photo` varchar(500) comment '图书封面图片',
-    `score` DECIMAL(2,1) comment '分数，最高分数9.9',
-    `recommend` int default 0 comment '图书总推荐',
-    `recommend_week` int default 0 comment '图书周推荐',
-    `sources` varchar(500) comment '图书来源url',
-    `sources_id` varchar(200) comment '来源中的唯一标识',
-    types_id int comment '图书所属分类' REFERENCES types(id),
-    word_count int comment '图书总字数',
-    latest_chapter_id int comment '最新章节',
-    stat bit default 0 comment '图书进度状态1：连载  0：完本',
-    update_time date comment '最新更新时间',
-    `spider_date` date comment '最新采集时间',
-    create_time date comment '创建时间',
-    UNIQUE KEY `unique_name_author` (`name`,`author`)
-) comment '图书表';
+DROP TABLE IF EXISTS `book_label`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `book_label` (
+  `book_id` int(11) NOT NULL,
+  `label_id` int(11) NOT NULL,
+  PRIMARY KEY (`book_id`,`label_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='图书标签对应表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-drop table if exists book_label;
-create table book_label (
-	book_id int references book(id) ,
-    label_id int references label(id) ,
-    primary key (book_id,label_id)
-) comment '图书标签对应表';
+--
+-- Table structure for table `book_types`
+--
 
-drop table if exists catalog;
-create table catalog (
-	id int AUTO_INCREMENT primary key,
-    `name` varchar(200) comment '目录原名称',
-    `show_name` varchar(200) comment '修正后名称',
-    `content_url` varchar(200) comment '内容页面URL',
-    book_id int comment '所属图书' REFERENCES book(id),
-    word_count int comment '章节总字数',
-    catalog_num int comment '章节数',
-    pub_time date comment '发布时间',
-    mark bit default 0 comment '是否已经爬取，1：已经爬取，0：未爬取',
-    del_flag bit default 0 comment '是否删除0：未删除 1：已删除',
-    `sources_id` varchar(200) comment '来源中的唯一标识',
-    `spider_date` date comment '最新采集时间',
-    create_time date comment '创建时间'
-) comment '图书目录';
+DROP TABLE IF EXISTS `book_types`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `book_types` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) DEFAULT NULL COMMENT '分类名称',
+  `parent_id` int(11) DEFAULT NULL COMMENT '父级id',
+  `seq` int(11) DEFAULT '0' COMMENT '排序序列号',
+  `pic` varchar(250) DEFAULT NULL COMMENT '分类图标',
+  `clazz` int(11) DEFAULT '0' COMMENT '分类所属种类0：默认  1：男生  2：女生  3：出版',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='图书分类';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-drop table if exists content;
-create table content (
-	id int AUTO_INCREMENT primary key,
-    book_id int comment '所属图书' REFERENCES book(id),
-    catalog_id int comment '所属章节' REFERENCES catalog(id),
-    txt text comment '章节内容'
-) comment '图书内容';
+--
+-- Table structure for table `catalog`
+--
 
+DROP TABLE IF EXISTS `catalog`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `catalog` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) DEFAULT NULL COMMENT '目录原名称',
+  `show_name` varchar(200) DEFAULT NULL COMMENT '修正后名称',
+  `volume_name` varchar(200) DEFAULT NULL COMMENT '卷名称（前提是图书分卷）',
+  `content_url` varchar(200) DEFAULT NULL COMMENT '内容页面URL',
+  `book_id` int(11) DEFAULT NULL COMMENT '所属图书',
+  `word_count` int(11) DEFAULT NULL COMMENT '章节总字数',
+  `catalog_num` int(11) DEFAULT NULL COMMENT '章节数',
+  `pub_time` datetime DEFAULT NULL COMMENT '发布时间',
+  `mark` bit(1) DEFAULT b'0' COMMENT '是否已经爬取，1：已经爬取，0：未爬取',
+  `del_flag` bit(1) DEFAULT b'0' COMMENT '是否删除0：未删除 1：已删除',
+  `sources_id` varchar(500) DEFAULT NULL COMMENT '图书在源网站中的唯一标识',
+  `uuid` varchar(200) DEFAULT NULL COMMENT '采集中的唯一标识，采集中识别关系',
+  `spider_date` datetime DEFAULT NULL COMMENT '采集时间',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uuid` (`uuid`)
+) ENGINE=InnoDB AUTO_INCREMENT=30064 DEFAULT CHARSET=utf8 COMMENT='图书目录';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Table structure for table `content`
+--
 
+DROP TABLE IF EXISTS `content`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `content` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `catalog_id` int(11) DEFAULT NULL COMMENT '所属章节',
+  `txt` text COMMENT '章节内容',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='图书内容';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `label`
+--
+
+DROP TABLE IF EXISTS `label`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `label` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) DEFAULT NULL COMMENT '标签名称',
+  `seq` int(11) DEFAULT '0' COMMENT '排序序列号',
+  `book_num` int(11) DEFAULT '0' COMMENT '图书数量',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='图书标签';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping events for database 'test'
+--
+
+--
+-- Dumping routines for database 'test'
+--
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2018-07-28 22:14:39

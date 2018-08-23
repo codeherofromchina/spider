@@ -15,7 +15,6 @@
         <module>novel-dao</module>
         <module>novel-api</module>
         <module>novel-admin</module>
-        <module>novel-cms</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -34,6 +33,21 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy</artifactId>
+                <version>2.1.6</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy-jsr223</artifactId>
+                <version>2.1.6</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <pluginManagement>

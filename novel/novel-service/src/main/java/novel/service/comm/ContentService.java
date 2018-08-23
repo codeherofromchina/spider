@@ -1,12 +1,13 @@
 package novel.service.comm;
 
-import novel.dao.mapper.ContentMapper;
+import novel.dao.mapper.CatalogMapper;
+import novel.dao.model.Catalog;
 import novel.dao.model.Content;
-import novel.dao.model.ContentExample;
+import novel.dao.oss.OSSHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by wangxiaodan on 2018/7/8.
@@ -14,33 +15,30 @@ import java.util.List;
 @Service
 public class ContentService {
     @Autowired
-    private ContentMapper contentMapper;
-
+    private OSSHelper ossHelper;
+    @Autowired
+    private CatalogMapper catalogMapper;
 
     /**
-     * 插入图书内容
+     * 插入内容到阿里云SSO对象存储中
      *
      * @param content
      * @return
      */
     public boolean insert(Content content) {
-        return contentMapper.insert(content) > 0;
+        boolean insertFlag = ossHelper.putObject(content.getCatalogUUID(), content.getText());
+        return insertFlag;
     }
 
-    /**
-     * 查询图书目录的具体文章内容
-     *
-     * @param catalogId
-     * @return
-     */
+    // 查询目录下的内容
     public Content findByCatalog(Integer catalogId) {
-        ContentExample example = new ContentExample();
-        ContentExample.Criteria criteria = example.createCriteria();
-        criteria.andCatalogIdEqualTo(catalogId);
-        List<Content> contents = contentMapper.selectByExampleWithBLOBs(example);
-        if (contents != null && contents.size() > 0) {
-            return contents.get(0);
-        }
-        return null;
+        Catalog catalog = catalogMapper.selectByPrimaryKey(catalogId);
+        String object = ossHelper.getObject(catalog.getUuid());
+        Content content = new Content();
+        content.setText(object);
+        content.setCatalog(String.valueOf(catalog.getBookId()));
+        content.setCatalogUUID(catalog.getUuid());
+
+        return content;
     }
 }
